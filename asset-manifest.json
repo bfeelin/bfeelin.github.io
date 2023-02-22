@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.js": "/leaderboard-demo/static/js/main.5e5d59e6.js",
-    "index.html": "/leaderboard-demo/index.html",
-    "main.5e5d59e6.js.map": "/leaderboard-demo/static/js/main.5e5d59e6.js.map"
+    "main.js": "/static/js/main.5e5d59e6.js",
+    "index.html": "/index.html",
+    "main.5e5d59e6.js.map": "/static/js/main.5e5d59e6.js.map"
   },
   "entrypoints": [
     "static/js/main.5e5d59e6.js"
