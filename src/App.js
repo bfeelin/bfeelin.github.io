@@ -5,9 +5,8 @@ import data from './Leaderboard/data.json'
 
 function App(  ) {
   console.log('app rendered')
-  const [currentData, setCurrentData] = useState()
+  const [currentData, setCurrentData] = useState(data)
   const [status, setStatus] = useState()
-  if(!currentData) setCurrentData(data)
   const FIVE_SECOND_MS = 5000;
 
   function getRandomInt(max) {
@@ -15,18 +14,23 @@ function App(  ) {
   }
 
   useEffect(() => {
+   
+    const incrementData = () => {
+      let chosenIndex = getRandomInt(currentData.length - 1)
+      let newCurrentData = currentData.map((item, i) => {
+        return chosenIndex === i ?
+          {...item,
+            dollarVolumeLifetime: item.dollarVolumeLifetime += 20000000,
+            noFundedLifetime: item.noFundedLifetime += 5
+          }
+          :
+          {...item}
+      })
+      setCurrentData([...newCurrentData])
+    }
+    incrementData()
     const interval = setInterval(() => {
-        let chosenIndex = getRandomInt(currentData.length - 1)
-        let newCurrentData = currentData.map((item, i) => {
-          return chosenIndex === i ?
-            {...item,
-              dollarVolumeLifetime: item.dollarVolumeLifetime += 20000000,
-              noFundedLifetime: item.noFundedLifetime += 5
-            }
-            :
-            {...item}
-        })
-        setCurrentData([...newCurrentData])
+        incrementData()
         console.log(currentData)
     }, [FIVE_SECOND_MS]);
 
@@ -38,7 +42,7 @@ function App(  ) {
     {currentData &&
       <>
         <Flex flexDir={'row'} justify='space-evenly'>
-          <Text mt='auto' mb='auto' maxW='350px' justify='center'>
+          <Flex mt='auto' mb='auto' maxW='350px' justify='center'>
             <ul>
               <li>
                   This purpose of this leaderboard is to give recognition and visiblity to salespeople 
@@ -50,7 +54,7 @@ function App(  ) {
               <li>This demo increments a random persons data every 5 seconds to simulate a sale</li>
               <li>Status: {status}</li>
             </ul>
-          </Text>
+          </Flex>
           <Leaderboard
               currentData={currentData}
               setStatus={setStatus}
