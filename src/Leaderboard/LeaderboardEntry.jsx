@@ -20,12 +20,10 @@ const LeaderboardEntry = ( { row } ) => {
             else{
                 setNewRow(row)
                 setOldRow(row)
-            }   
+            }
         }
         setRows()
     }, [row]) 
-
-
 
     return(
                 <>
