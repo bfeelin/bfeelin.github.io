@@ -5,7 +5,7 @@ import CountUp from 'react-countup';
 
 const delay = ms => new Promise(res => setTimeout(res, ms));
 
-const LeaderboardEntry = ( { row } ) => {
+const LeaderboardEntry = ( { row, setStatus } ) => {
     console.log('render leaderboard entry')
     const [newRow, setNewRow] = useState()
     const [oldRow, setOldRow] = useState()
@@ -13,13 +13,16 @@ const LeaderboardEntry = ( { row } ) => {
      useEffect(() => {
         async function setRows(){
             if(oldRow){
+
+                {oldRow.dollarVolumeLifetime !== row.dollarVolumeLifetime && setStatus(`Incrementing ${row.LO.Name}`)}
                 setNewRow(row)
                 await delay(2100)
                 setOldRow(row)
+                setStatus(``)
             }
             else{
-                setNewRow(row)
                 setOldRow(row)
+                setNewRow(row)
             }
         }
         setRows()
