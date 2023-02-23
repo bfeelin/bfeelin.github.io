@@ -7,6 +7,6 @@ import data from './Leaderboard/data.json'
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <ChakraProvider>
-      <App data={data}/>
+      <App jsonData={data}/>
     </ChakraProvider>
 );
