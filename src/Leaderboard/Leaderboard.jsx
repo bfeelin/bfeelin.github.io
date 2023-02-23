@@ -5,54 +5,61 @@ import { Reorder } from "framer-motion";
 import { Progress } from '@chakra-ui/react'
 import LeaderboardEntry from './LeaderboardEntry'
 
+const delay = ms => new Promise(res => setTimeout(res, ms));
 
-export default function Leaderboard( { limit, initTimeline, initProperty, allData, dataUpdated, initData } ){
+// Initial data is read from data.json
+// Every 5 seconds, a random entry is selected and its values are incremented
+// When this interval runs, I think the data is set to the intial data again? The component rerenders
+// This causes the person who previously was incremented to return to their original position
+export default function Leaderboard( { limit, initTimeline, initProperty, initialData } ){
     console.log('Leaderboard rendered')
+    const [data, setData] = useState(initialData)
     const [timeline, setTimeline] = useState(initTimeline ? initTimeline : 'Lifetime')
     const [property, setProperty] = useState(initProperty ? initProperty : 'dollarVolume')
-    const [sortedData, setSortedData] = useState(initData ? initData : null)
-    const [, forceUpdate] = useReducer(x => x + 1, 0);
-    const [data, setData] = useState(allData)
+    const [sortedData, setSortedData] = useState()
 
     const FIVE_SECOND_MS = 5000;
 
     function getRandomInt(max) {
         return Math.floor(Math.random() * max);
       }
-    useEffect(() => {
-      const interval = setInterval(() => {
-          incrementData()
-      }, FIVE_SECOND_MS);
+
+     useEffect(() => {
+        const interval = setInterval(() => {
+            setData(incrementData())
+        }, [FIVE_SECOND_MS]);
   
-      return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
-      }, [])
-  
+        return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
+      }, []) 
+   
       const incrementData = () => {
-        let chosenIndex = getRandomInt(data.length - 1)
-        let chosen = {...data[chosenIndex]}
-        chosen.dollarVolumeLifetime += 20000000
-        chosen.noFundedLifetime += 10
-        let newData = [...data]
-        newData[chosenIndex] = chosen
-        setData([...newData])
+        if(data){
+            let chosenIndex = getRandomInt(data.length - 1)
+            let chosen = {...data[chosenIndex]}
+            chosen.dollarVolumeLifetime += 20000000
+            chosen.noFundedLifetime += 10
+            let newData = [...data]
+            newData[chosenIndex] = chosen
+            return [...newData]
+        }
       }
 
      useEffect(() => {
         console.log('sorting')
-        if(property == 'Funded'){
-            sortArrayByProperty('noFundedLifetime')
+        if(data){
+            if(property == 'Funded'){
+                setSortedData(sortArrayByProperty('noFundedLifetime'))
+            }
+            else setSortedData(sortArrayByProperty('dollarVolumeLifetime'))
         }
-        else sortArrayByProperty('dollarVolumeLifetime')
      }, [property, data])
 
     const sortArrayByProperty = (prop) => {
-        setSortedData([...data].sort((a,b) => b[`${prop}`] - a[`${prop}`]))
-        console.log(sortedData)
+        return [...data].sort((a,b) => b[`${prop}`] - a[`${prop}`])
     }
     
       return (
             <>   
-       
             <Flex p={3} flexDir={'column'} w='250px'>
                 {sortedData && 
                 <>
@@ -67,7 +74,7 @@ export default function Leaderboard( { limit, initTimeline, initProperty, allDat
                     </Flex>
                 </Heading>
                 </Center>
-                {allData &&
+                {sortedData &&
                 <Flex mb={2} justify={'space-between'} flexDir='row'>
                     <Button p={0} variant={'ghost'} size='xs' onClick={() => setProperty('dollarVolume')}>
                         <Tag 
@@ -81,7 +88,8 @@ export default function Leaderboard( { limit, initTimeline, initProperty, allDat
                             {property == 'dollarVolume' && <TagRightIcon as={FiChevronDown}/> }
                         </Tag>
                     </Button>
-                    <Button p={0} variant={'ghost'} size='xs' onClick={() => setProperty('Funded')}>
+{/*                     <Button onClick={() => setData(incrementData())}>X</Button>
+ */}                    <Button p={0} variant={'ghost'} size='xs' onClick={() => setProperty('Funded')}>
                         <Tag 
                             borderRadius={'3xl'} 
                             m={2}
