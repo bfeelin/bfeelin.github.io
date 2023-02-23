@@ -1,8 +1,9 @@
 import { Center } from '@chakra-ui/react';
 import Leaderboard from './Leaderboard/Leaderboard';
 import { useState, useEffect, useCallback } from 'react';
+import data from './Leaderboard/data.json'
 
-function App( { data } ) {
+function App(  ) {
   console.log('app rendered')
   return (
     <>
@@ -10,7 +11,7 @@ function App( { data } ) {
       <>
       <Center>
         <Leaderboard
-            allData={data}
+            initialData={data}
           />
       </Center>
       </>
