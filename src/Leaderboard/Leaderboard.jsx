@@ -11,51 +11,25 @@ const delay = ms => new Promise(res => setTimeout(res, ms));
 // Every 5 seconds, a random entry is selected and its values are incremented
 // When this interval runs, I think the data is set to the intial data again? The component rerenders
 // This causes the person who previously was incremented to return to their original position
-export default function Leaderboard( { limit, initTimeline, initProperty, initialData } ){
+export default function Leaderboard( { limit, initTimeline, initProperty, currentData, setStatus } ){
     console.log('Leaderboard rendered')
-    const [data, setData] = useState(initialData)
     const [timeline, setTimeline] = useState(initTimeline ? initTimeline : 'Lifetime')
     const [property, setProperty] = useState(initProperty ? initProperty : 'dollarVolume')
     const [sortedData, setSortedData] = useState()
 
-    const FIVE_SECOND_MS = 5000;
-
-    function getRandomInt(max) {
-        return Math.floor(Math.random() * max);
-      }
-
      useEffect(() => {
-        const interval = setInterval(() => {
-            setData(incrementData())
-        }, [FIVE_SECOND_MS]);
-  
-        return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
-      }, []) 
-   
-      const incrementData = () => {
-        if(data){
-            let chosenIndex = getRandomInt(data.length - 1)
-            let chosen = {...data[chosenIndex]}
-            chosen.dollarVolumeLifetime += 20000000
-            chosen.noFundedLifetime += 10
-            let newData = [...data]
-            newData[chosenIndex] = chosen
-            return [...newData]
-        }
-      }
-
-     useEffect(() => {
-        console.log('sorting')
-        if(data){
+         console.log('sorting')
+         if(currentData){
             if(property == 'Funded'){
                 setSortedData(sortArrayByProperty('noFundedLifetime'))
             }
             else setSortedData(sortArrayByProperty('dollarVolumeLifetime'))
-        }
-     }, [property, data])
+         }
+     }, [property, currentData])
 
     const sortArrayByProperty = (prop) => {
-        return [...data].sort((a,b) => b[`${prop}`] - a[`${prop}`])
+        console.log(currentData)
+        return [...currentData].sort((a,b) => b[`${prop}`] - a[`${prop}`])
     }
     
       return (
@@ -114,7 +88,7 @@ export default function Leaderboard( { limit, initTimeline, initProperty, initia
                                         dragListener={false}
                                         draggable={false} 
                                         value={row}>
-                                        <LeaderboardEntry key={`${row.LO.Name}`} row={row} property={property} timeline={timeline} />
+                                        <LeaderboardEntry key={`${row.LO.Name}`} row={row} property={property} timeline={timeline} setStatus={setStatus}/>
                                     </Reorder.Item>
                                 )
                             }
