@@ -5,24 +5,17 @@ import CountUp from 'react-countup';
 
 const delay = ms => new Promise(res => setTimeout(res, ms));
 
-const LeaderboardEntry = ( { row, setStatus } ) => {
+const LeaderboardEntry = ( { row } ) => {
     console.log('render leaderboard entry')
-    const [newRow, setNewRow] = useState()
-    const [oldRow, setOldRow] = useState()
+    const [newRow, setNewRow] = useState(row)
+    const [oldRow, setOldRow] = useState(row)
 
      useEffect(() => {
         async function setRows(){
-            if(oldRow){
-
-                {oldRow.dollarVolumeLifetime !== row.dollarVolumeLifetime && setStatus(`Incrementing ${row.LO.Name}`)}
+            if(oldRow && (row.dollarVolumeLifetime !== oldRow.dollarVolumeLifetime)){
                 setNewRow(row)
                 await delay(2100)
                 setOldRow(row)
-                setStatus(``)
-            }
-            else{
-                setOldRow(row)
-                setNewRow(row)
             }
         }
         setRows()
@@ -36,9 +29,7 @@ const LeaderboardEntry = ( { row, setStatus } ) => {
                     <Flex 
                         flexDir={'row'}   
                         key={`row-${row.LO.Name}`} 
-                        py={3}
-                        px={1}
-                        mb={3}
+                        py={3} px={1} mb={3}
                         flexGrow={1}
                         borderRadius="lg"
                         w='200px'
@@ -51,13 +42,29 @@ const LeaderboardEntry = ( { row, setStatus } ) => {
                             flexGrow={1}
                             flexDir='row'>
                             <Center>
-                                <Avatar key={`${row.LO.Name}-avatar`} mr={2} src={`https://api.dicebear.com/5.x/big-smile/svg?seed=${row.LO.Name}`} size='sm'></Avatar>
+                                <Avatar 
+                                    key={`${row.LO.Name}-avatar`} 
+                                    mr={2} 
+                                    src={`https://api.dicebear.com/5.x/big-smile/svg?seed=${row.LO.Name}`} 
+                                    size='sm'>
+                                </Avatar>
                                 <Flex key={row.LO.Name} flexDir={'column'}>
-                                    <Text fontWeight={newRow.dollarVolumeLifetime == oldRow.dollarVolumeLifetime ? 'normal' : 'semibold'} fontSize='sm'>{row.LO.Name}</Text>
-                                
-                                    <Text as='em' color={'gray.600'} fontSize='xs' fontWeight={newRow.dollarVolumeLifetime == oldRow.dollarVolumeLifetime ? 'normal' : 'extrabold'}>
-                                        <CountUp prefix="$" separator="," duration={2} start={oldRow.dollarVolumeLifetime} end={newRow.dollarVolumeLifetime}/>
-    
+                                    <Text 
+                                        fontWeight={newRow.dollarVolumeLifetime == oldRow.dollarVolumeLifetime ? 'normal' : 'semibold'} 
+                                        fontSize='sm'>
+                                            {row.LO.Name}
+                                    </Text>
+                                    <Text 
+                                        as='em' 
+                                        color={'gray.600'} 
+                                        fontSize='xs' 
+                                        fontWeight={newRow.dollarVolumeLifetime == oldRow.dollarVolumeLifetime ? 'normal' : 'extrabold'}>
+                                        <CountUp 
+                                            prefix="$" 
+                                            separator="," 
+                                            duration={2} 
+                                            start={oldRow.dollarVolumeLifetime} end={newRow.dollarVolumeLifetime}
+                                        />
                                     </Text>
                                 </Flex>
                             </Center>
@@ -67,10 +74,9 @@ const LeaderboardEntry = ( { row, setStatus } ) => {
                         </Text>
                     </Flex>
                 </motion.div>
-
             }
             </>
     )
 }
 
-export default memo(LeaderboardEntry)
+export default LeaderboardEntry
