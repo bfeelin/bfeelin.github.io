@@ -11,7 +11,7 @@ const delay = ms => new Promise(res => setTimeout(res, ms));
 // Every 5 seconds, a random entry is selected and its values are incremented
 // When this interval runs, I think the data is set to the intial data again? The component rerenders
 // This causes the person who previously was incremented to return to their original position
-export default function Leaderboard( { limit, initTimeline, initProperty, currentData, setStatus } ){
+export default function Leaderboard( { initTimeline, initProperty, currentData } ){
     console.log('Leaderboard rendered')
     const [timeline, setTimeline] = useState(initTimeline ? initTimeline : 'Lifetime')
     const [property, setProperty] = useState(initProperty ? initProperty : 'dollarVolume')
@@ -19,16 +19,18 @@ export default function Leaderboard( { limit, initTimeline, initProperty, curren
 
      useEffect(() => {
          console.log('sorting')
-         if(currentData){
-            if(property == 'Funded'){
-                setSortedData(sortArrayByProperty('noFundedLifetime'))
-            }
-            else setSortedData(sortArrayByProperty('dollarVolumeLifetime'))
+         const sortData = () => {
+            if(currentData){
+                if(property == 'Funded'){
+                    setSortedData(sortArrayByProperty('noFundedLifetime'))
+                }
+                else setSortedData(sortArrayByProperty('dollarVolumeLifetime'))
+             }
          }
+         sortData()
      }, [property, currentData])
 
     const sortArrayByProperty = (prop) => {
-        console.log(currentData)
         return [...currentData].sort((a,b) => b[`${prop}`] - a[`${prop}`])
     }
     
@@ -62,8 +64,7 @@ export default function Leaderboard( { limit, initTimeline, initProperty, curren
                             {property == 'dollarVolume' && <TagRightIcon as={FiChevronDown}/> }
                         </Tag>
                     </Button>
-{/*                     <Button onClick={() => setData(incrementData())}>X</Button>
- */}                    <Button p={0} variant={'ghost'} size='xs' onClick={() => setProperty('Funded')}>
+                     <Button p={0} variant={'ghost'} size='xs' onClick={() => setProperty('Funded')}>
                         <Tag 
                             borderRadius={'3xl'} 
                             m={2}
@@ -75,23 +76,24 @@ export default function Leaderboard( { limit, initTimeline, initProperty, curren
                             {property == 'Funded' && <TagRightIcon as={FiChevronDown}/> }
                         </Tag>
                     </Button>
-                
                 </Flex>}
                 <Flex p={2}>
                     <Reorder.Group as='div' draggable={false} dragControls={false} dragListener={false} axis='y' values={sortedData}>
-                        {sortedData.map((row, i) => {
-                            if(!limit || i < limit){
-                                return(
-                                    <Reorder.Item 
-                                        as='div' 
+                        {sortedData.map((row) => {
+                            return(
+                                <Reorder.Item 
+                                    as='div' 
+                                    key={`${row.LO.Name}`} 
+                                    dragListener={false}
+                                    draggable={false} 
+                                    value={row}>
+                                    <LeaderboardEntry 
                                         key={`${row.LO.Name}`} 
-                                        dragListener={false}
-                                        draggable={false} 
-                                        value={row}>
-                                        <LeaderboardEntry key={`${row.LO.Name}`} row={row} property={property} timeline={timeline} setStatus={setStatus}/>
-                                    </Reorder.Item>
-                                )
-                            }
+                                        row={row} 
+                                        property={property} 
+                                        timeline={timeline}/>
+                                </Reorder.Item>
+                            )
                         })}   
                     </Reorder.Group>
                 </Flex>
