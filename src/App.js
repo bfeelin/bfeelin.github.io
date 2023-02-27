@@ -5,7 +5,7 @@ import data from './Leaderboard/data.json'
 
 function App(  ) {
   const [currentData, setCurrentData] = useState(data)
-  const timer = 8000
+  const timer = 5000
 
   function getRandomInt(max) {
     return Math.floor(Math.random() * max);
