@@ -4,19 +4,16 @@ import { useState, useEffect, useCallback } from 'react';
 import data from './Leaderboard/data.json'
 
 function App(  ) {
-  console.log('app rendered')
   const [currentData, setCurrentData] = useState(data)
-  const [status, setStatus] = useState()
-  const FIVE_SECOND_MS = 5000;
+  const timer = 8000
 
   function getRandomInt(max) {
     return Math.floor(Math.random() * max);
   }
 
   useEffect(() => {
-   
     const incrementData = () => {
-      let chosenIndex = getRandomInt(currentData.length - 1)
+      let chosenIndex = getRandomInt(currentData.length)
       let newCurrentData = currentData.map((item, i) => {
         return chosenIndex === i ?
           {...item,
@@ -31,8 +28,7 @@ function App(  ) {
     incrementData()
     const interval = setInterval(() => {
         incrementData()
-        console.log(currentData)
-    }, [FIVE_SECOND_MS]);
+    }, [timer]);
 
     return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
   }, []) 
@@ -52,12 +48,10 @@ function App(  ) {
               to animate the leaderboard after a new sale was made
               </li>
               <li>This demo increments a random persons data every 5 seconds to simulate a sale</li>
-              <li>Status: {status}</li>
             </ul>
           </Flex>
           <Leaderboard
               currentData={currentData}
-              setStatus={setStatus}
             />
         </Flex>
       </>
