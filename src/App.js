@@ -1,4 +1,4 @@
-import { Center, Text, Flex, Spinner } from '@chakra-ui/react';
+import { Center, Text, Flex, Spinner, UnorderedList, ListItem, Link } from '@chakra-ui/react';
 import Leaderboard from './Leaderboard/Leaderboard';
 import { useState, useEffect, useCallback } from 'react';
 import data from './Leaderboard/data.json'
@@ -39,16 +39,19 @@ function App(  ) {
       <>
         <Flex flexDir={'row'} justify='space-evenly'>
           <Flex mt='auto' mb='auto' maxW='350px' justify='center'>
-            <ul>
-              <li>
+            <UnorderedList>
+              <ListItem>
                   This purpose of this leaderboard is to give recognition and visiblity to salespeople 
-              </li>
-              <li>
-               <a href='https://www.npmjs.com/package/framer-motion'>framer-motion</a> and <a href='https://www.npmjs.com/package/react-countup'>react-countup</a> were used
-              to animate the leaderboard after a new sale was made
-              </li>
-              <li>This demo increments a random persons data every 5 seconds to simulate a sale</li>
-            </ul>
+              </ListItem>
+              <ListItem>
+                <Link isExternal href='https://www.npmjs.com/package/framer-motion' color='teal.500'>framer-motion</Link> and 
+                <Link isExternal href='https://www.npmjs.com/package/react-countup' color='teal.500'> react-countup</Link> were used
+                  to animate the leaderboard after a new sale was made
+              </ListItem>
+              <ListItem>This demo increments a random persons data every 5 seconds to simulate a sale</ListItem>
+              <ListItem>View the source code here: <Link isExternal href='https://github.com/bfeelin/bfeelin.github.io' color='teal.500'>https://github.com/bfeelin/bfeelin.github.io</Link></ListItem>
+
+            </UnorderedList>
           </Flex>
           <Leaderboard
               currentData={currentData}
