@@ -3,7 +3,11 @@ import Leaderboard from './Leaderboard/Leaderboard';
 import { useState, useEffect, useCallback } from 'react';
 import data from './Leaderboard/data.json'
 
-function App(  ) {
+
+// Initial data is read from data.json
+// Every 5 seconds, a random entry is selected and its values are incremented
+
+function App( ) {
   const [currentData, setCurrentData] = useState(data)
   const timer = 5000
 

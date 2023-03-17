@@ -5,10 +5,6 @@ import { Reorder } from "framer-motion";
 import { Progress } from '@chakra-ui/react'
 import LeaderboardEntry from './LeaderboardEntry'
 
-const delay = ms => new Promise(res => setTimeout(res, ms));
-
-// Initial data is read from data.json
-// Every 5 seconds, a random entry is selected and its values are incremented
 export default function Leaderboard( { initTimeline, initProperty, currentData } ){
     const [timeline, setTimeline] = useState(initTimeline ? initTimeline : 'Lifetime')
     const [property, setProperty] = useState(initProperty ? initProperty : 'dollarVolume')
