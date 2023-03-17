@@ -9,10 +9,7 @@ const delay = ms => new Promise(res => setTimeout(res, ms));
 
 // Initial data is read from data.json
 // Every 5 seconds, a random entry is selected and its values are incremented
-// When this interval runs, I think the data is set to the intial data again? The component rerenders
-// This causes the person who previously was incremented to return to their original position
 export default function Leaderboard( { initTimeline, initProperty, currentData } ){
-    console.log('Leaderboard rendered')
     const [timeline, setTimeline] = useState(initTimeline ? initTimeline : 'Lifetime')
     const [property, setProperty] = useState(initProperty ? initProperty : 'dollarVolume')
     const [sortedData, setSortedData] = useState()

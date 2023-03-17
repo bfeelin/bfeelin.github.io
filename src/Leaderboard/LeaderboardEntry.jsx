@@ -6,7 +6,6 @@ import CountUp from 'react-countup';
 const delay = ms => new Promise(res => setTimeout(res, ms));
 
 const LeaderboardEntry = ( { row } ) => {
-    console.log('render leaderboard entry')
     const [newRow, setNewRow] = useState()
     const [oldRow, setOldRow] = useState()
 
